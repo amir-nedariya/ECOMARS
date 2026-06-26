@@ -17,7 +17,6 @@ export default function AdminLayout({ children }) {
  { name:"Dashboard", href:"/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
  { name:"Products", href:"/admin/products", icon: <PackageSearch className="h-5 w-5" /> },
  { name:"Categories", href:"/admin/categories", icon: <Tags className="h-5 w-5" /> },
- { name:"Sub Categories", href:"/admin/subcategories", icon: <Tags className="h-5 w-5 opacity-70" /> },
  { name:"Orders", href:"/admin/orders", icon: <ShoppingCart className="h-5 w-5" /> },
  { name:"Users", href:"/admin/users", icon: <Users className="h-5 w-5" /> },
  { name:"Coupons", href:"/admin/coupons", icon: <Ticket className="h-5 w-5" /> },
