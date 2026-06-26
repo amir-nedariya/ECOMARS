@@ -1,71 +1,60 @@
-import { Search, Heart, ShoppingCart, User } from 'lucide-react';
+import { Search, Heart, ShoppingCart, User, Menu } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   return (
-    <header className="fixed w-full top-0 z-50 glass shadow-sm transition-all duration-300">
+    <header className="fixed w-full top-0 z-50 bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-black text-gradient tracking-tighter">
-              ECOMARS
+          {/* Left: Mobile Menu & Logo */}
+          <div className="flex items-center gap-4">
+            <button className="lg:hidden text-slate-600 dark:text-slate-300">
+              <Menu className="h-6 w-6" />
+            </button>
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="ECOMARS Logo" width={200} height={56} className="h-12 sm:h-14 w-auto object-contain" priority />
             </Link>
           </div>
 
-          {/* Search Bar */}
-          <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-            <div className="relative w-full group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
-              </div>
-              <input
-                type="text"
-                className="block w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 rounded-full leading-5 bg-slate-50 dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:bg-white dark:focus:bg-slate-900 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 sm:text-sm"
-                placeholder="Search products, brands and categories..."
-              />
-            </div>
-          </div>
+          {/* Center: Navigation Links */}
+          <nav className="hidden lg:flex items-center space-x-8">
+            {[
+              { name: 'Home', path: '/' },
+              { name: 'New Arrivals', path: '/products' },
+              { name: 'Categories', path: '/products' },
+              { name: 'Best Sellers', path: '/products' },
+              { name: 'Offers', path: '/products' }
+            ].map((item) => (
+              <Link 
+                key={item.name} 
+                href={item.path} 
+                className="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Icons & Actions */}
-          <div className="flex items-center space-x-6">
-            <Link href="/account" className="text-slate-500 hover:text-primary transition-colors flex flex-col items-center group">
-              <Heart className="h-6 w-6 group-hover:fill-primary/10 transition-all" />
-              <span className="text-[10px] font-medium mt-1">Wishlist</span>
+          {/* Right: Icons & Actions */}
+          <div className="flex items-center space-x-5 sm:space-x-6">
+            <button className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+              <Search className="h-5 w-5" />
+            </button>
+            <Link href="/account" className="hidden sm:block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+              <Heart className="h-5 w-5" />
             </Link>
-            <Link href="/cart" className="text-slate-500 hover:text-primary transition-colors flex flex-col items-center relative group">
-              <div className="relative">
-                <ShoppingCart className="h-6 w-6 group-hover:fill-primary/10 transition-all" />
-                <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">2</span>
-              </div>
-              <span className="text-[10px] font-medium mt-1">Cart</span>
+            <Link href="/account" className="hidden sm:block text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+              <User className="h-5 w-5" />
             </Link>
-            <Link href="/account" className="text-slate-500 hover:text-primary transition-colors flex flex-col items-center group">
-              <User className="h-6 w-6 group-hover:fill-primary/10 transition-all" />
-              <span className="text-[10px] font-medium mt-1">Account</span>
+            <Link href="/cart" className="text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+              <ShoppingCart className="h-4 w-4" />
+              <span className="text-xs font-bold">2</span>
             </Link>
           </div>
 
         </div>
-
-        {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-8 pb-3 justify-center">
-          {[
-            { name: 'Home', path: '/' },
-            { name: 'Categories', path: '/products' },
-            { name: 'Products', path: '/products' },
-            { name: 'Offers', path: '/products' }
-          ].map((item) => (
-            <Link 
-              key={item.name} 
-              href={item.path} 
-              className="text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300 pb-1"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
       </div>
     </header>
   );

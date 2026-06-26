@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Users as UsersIcon, Search, Filter, ShieldAlert, ShieldCheck, Mail, ChevronLeft, ChevronRight } from "lucide-react";
+import { Users as UsersIcon, Search, Filter, ShieldAlert, ShieldCheck, Phone, ChevronLeft, ChevronRight, Users, UserCheck, UserX, ShoppingCart } from "lucide-react";
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState([
-    { id: 1, name: "Amir", email: "amir@gmail.com", orders: 5, status: "Active", joinDate: "12 May 2023" },
-    { id: 2, name: "Rahul Sharma", email: "rahul.s@example.com", orders: 12, status: "Active", joinDate: "03 Jun 2023" },
-    { id: 3, name: "Priya Patel", email: "priya.p@example.com", orders: 3, status: "Blocked", joinDate: "15 Aug 2023" },
-    { id: 4, name: "Amit Kumar", email: "amit.k@example.com", orders: 0, status: "Active", joinDate: "22 Nov 2023" },
-    { id: 5, name: "Neha Singh", email: "neha.singh@example.com", orders: 8, status: "Active", joinDate: "05 Jan 2024" },
+    { id: 1, name: "Amir", phone: "+91 9876543210", orders: 5, status: "Active", joinDate: "12 May 2023" },
+    { id: 2, name: "Rahul Sharma", phone: "+91 8765432109", orders: 12, status: "Active", joinDate: "03 Jun 2023" },
+    { id: 3, name: "Priya Patel", phone: "+91 7654321098", orders: 3, status: "Blocked", joinDate: "15 Aug 2023" },
+    { id: 4, name: "Amit Kumar", phone: "+91 6543210987", orders: 0, status: "Active", joinDate: "22 Nov 2023" },
+    { id: 5, name: "Neha Singh", phone: "+91 5432109876", orders: 8, status: "Active", joinDate: "05 Jan 2024" },
   ]);
 
   const toggleUserStatus = (userId) => {
@@ -36,11 +36,31 @@ export default function UserManagementPage() {
         </div>
       </div>
 
+      {/* KPIs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: "Total Users", value: users.length.toString(), icon: Users, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" },
+          { title: "Active Users", value: users.filter(u => u.status === 'Active').length.toString(), icon: UserCheck, color: "text-[#00c896]", bg: "bg-[#00c896]/10" },
+          { title: "Blocked Users", value: users.filter(u => u.status === 'Blocked').length.toString(), icon: UserX, color: "text-red-500", bg: "bg-red-50 dark:bg-red-500/10" },
+          { title: "Total Orders", value: users.reduce((acc, curr) => acc + curr.orders, 0).toString(), icon: ShoppingCart, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-500/10" }
+        ].map((kpi, index) => (
+          <div key={index} className="bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className={`w-12 h-12 ${kpi.bg} ${kpi.color} rounded-full flex items-center justify-center shrink-0`}>
+              <kpi.icon className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-slate-500 font-medium mb-1">{kpi.title}</p>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{kpi.value}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Toolbar */}
       <div className="bg-white dark:bg-slate-900 p-4 shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row gap-4 justify-between items-center rounded-lg">
         <div className="relative w-full sm:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-          <input type="text" placeholder="Search by name or email..."
+          <input type="text" placeholder="Search by name or phone..."
             className="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-primary text-sm transition-all rounded-md"
           />
         </div>
@@ -64,7 +84,7 @@ export default function UserManagementPage() {
             <thead>
               <tr className="bg-[#1F2336] text-white text-xs font-semibold tracking-wide">
                 <th className="p-4 pl-6 whitespace-nowrap">Name</th>
-                <th className="p-4 whitespace-nowrap">Email</th>
+                <th className="p-4 whitespace-nowrap">Phone Number</th>
                 <th className="p-4 text-center whitespace-nowrap">Orders</th>
                 <th className="p-4 whitespace-nowrap">Status</th>
                 <th className="p-4 text-right pr-6 whitespace-nowrap">Actions</th>
@@ -86,8 +106,8 @@ export default function UserManagementPage() {
                   </td>
                   <td className="p-4 text-slate-600 dark:text-slate-400 font-medium">
                     <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-slate-400" />
-                      {user.email}
+                      <Phone className="h-4 w-4 text-slate-400" />
+                      {user.phone}
                     </div>
                   </td>
                   <td className="p-4 text-center">

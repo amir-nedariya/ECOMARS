@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowLeft, Package, Truck, User, MapPin, CreditCard, Download, Printer, CheckCircle2, XCircle, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Package, Truck, User, MapPin, CreditCard, Download, Printer, CheckCircle2, XCircle, Image as ImageIcon, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 export default function OrderDetailsPage() {
   const params = useParams();
   const orderId = params.id;
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   // Mock order data based on ID
   const [order, setOrder] = useState({
@@ -232,7 +233,9 @@ export default function OrderDetailsPage() {
                   </div>
                   <div className="col-span-2">
                     <p className="text-sm text-slate-500 mb-2">Screenshot</p>
-                    <button className="flex items-center gap-2 text-primary hover:text-indigo-600 bg-primary/10 px-4 py-2 rounded-lg transition-colors font-medium text-sm w-max">
+                    <button 
+                      onClick={() => setIsImageModalOpen(true)}
+                      className="flex items-center gap-2 text-primary hover:text-indigo-600 bg-primary/10 px-4 py-2 rounded-lg transition-colors font-medium text-sm w-max">
                       <ImageIcon className="h-4 w-4" /> View Image
                     </button>
                   </div>
@@ -300,6 +303,36 @@ export default function OrderDetailsPage() {
 
         </div>
       </div>
+
+      {/* Image Modal */}
+      {isImageModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6 animate-fade-in" onClick={() => setIsImageModalOpen(false)}>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden max-w-lg w-full relative transform scale-100 animate-slide-up flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
+              <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                <ImageIcon className="h-5 w-5 text-indigo-500" /> Payment Screenshot
+              </h3>
+              <button 
+                onClick={() => setIsImageModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-6 bg-slate-50 dark:bg-slate-900/50 flex justify-center overflow-y-auto">
+              <div className="relative w-full h-[60vh] max-h-[600px] rounded-xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 bg-white">
+                {/* Fallback image when no actual screenshot URL is available */}
+                <Image 
+                  src="https://images.unsplash.com/photo-1616077168712-fc6c788db4af?auto=format&fit=crop&q=80&w=400&h=600" 
+                  alt="Payment Screenshot" 
+                  fill 
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PackageOpen, Search, Filter, Eye, Download, ChevronLeft, ChevronRight, Edit2, Trash2 } from "lucide-react";
+import { PackageOpen, Search, Filter, Eye, Download, ChevronLeft, ChevronRight, Edit2, Trash2, ShoppingBag, IndianRupee, Clock, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -44,6 +44,26 @@ export default function OrderManagementPage() {
           <Download className="h-4 w-4" />
           Export CSV
         </button>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: "TOTAL REVENUE", value: `₹${orders.reduce((acc, curr) => acc + parseInt(curr.amount.replace(/[^0-9]/g, '')), 0).toLocaleString()}`, icon: IndianRupee, color: "text-[#0F5132]", bg: "bg-[#E8F5E9]", border: "border-l-4 border-l-[#0F5132]" },
+          { title: "TOTAL ORDERS", value: orders.length.toString(), icon: ShoppingBag, color: "text-[#2C3E50]", bg: "bg-[#F1F5F9]", border: "border-l-4 border-l-[#2C3E50]" },
+          { title: "PENDING ORDERS", value: orders.filter(o => o.status === 'Pending').length.toString(), icon: Clock, color: "text-[#E67E22]", bg: "bg-[#FFF8E1]", border: "border-l-4 border-l-[#E67E22]" },
+          { title: "COMPLETED ORDERS", value: orders.filter(o => o.status === 'Delivered').length.toString(), icon: CheckCircle, color: "text-[#00C896]", bg: "bg-[#E8F8F5]", border: "border-l-4 border-l-[#00C896]" }
+        ].map((kpi, index) => (
+          <div key={index} className={`bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between ${kpi.border}`}>
+            <div>
+              <p className="text-xs font-bold text-slate-500 tracking-wider mb-2">{kpi.title}</p>
+              <h3 className={`text-2xl font-extrabold ${kpi.color}`}>{kpi.value}</h3>
+            </div>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${kpi.bg}`}>
+              <kpi.icon className={`h-6 w-6 ${kpi.color}`} strokeWidth={2.5} />
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Toolbar */}

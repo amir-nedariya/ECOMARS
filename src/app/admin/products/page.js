@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Trash2, Search, Filter, PackageSearch, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Edit2, Trash2, Search, Filter, PackageSearch, ChevronLeft, ChevronRight, Package, Layers, AlertCircle, XOctagon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -43,6 +43,26 @@ export default function ProductManagementPage() {
           <Plus className="h-4 w-4" />
           Add Product
         </Link>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: "TOTAL PRODUCTS", value: products.length.toString(), icon: Package, color: "text-[#2C3E50]", bg: "bg-[#F1F5F9]", border: "border-l-4 border-l-[#2C3E50]" },
+          { title: "TOTAL STOCK", value: products.reduce((acc, curr) => acc + curr.stock, 0).toString(), icon: Layers, color: "text-[#0F5132]", bg: "bg-[#E8F5E9]", border: "border-l-4 border-l-[#0F5132]" },
+          { title: "LOW STOCK", value: products.filter(p => p.stock > 0 && p.stock <= 5).length.toString(), icon: AlertCircle, color: "text-[#E67E22]", bg: "bg-[#FFF8E1]", border: "border-l-4 border-l-[#E67E22]" },
+          { title: "OUT OF STOCK", value: products.filter(p => p.stock === 0).length.toString(), icon: XOctagon, color: "text-red-500", bg: "bg-red-50 dark:bg-red-500/10", border: "border-l-4 border-l-red-500" }
+        ].map((kpi, index) => (
+          <div key={index} className={`bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between ${kpi.border}`}>
+            <div>
+              <p className="text-xs font-bold text-slate-500 tracking-wider mb-2">{kpi.title}</p>
+              <h3 className={`text-2xl font-extrabold ${kpi.color}`}>{kpi.value}</h3>
+            </div>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${kpi.bg}`}>
+              <kpi.icon className={`h-6 w-6 ${kpi.color}`} strokeWidth={2.5} />
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Toolbar */}
@@ -100,8 +120,22 @@ export default function ProductManagementPage() {
                   <td className="p-4 text-[#00c896] font-bold">
                     {product.price}
                   </td>
-                  <td className="p-4 text-slate-400 font-medium">
-                    {product.stock}
+                  <td className="p-4">
+                    {product.stock === 0 ? (
+                      <span className="text-red-500 font-semibold text-xs flex items-center gap-1.5 bg-red-50 border border-red-200 px-2.5 py-1 rounded-full w-max">
+                        <XOctagon className="w-3.5 h-3.5" />
+                        Out of Stock
+                      </span>
+                    ) : product.stock <= 5 ? (
+                      <span className="text-[#E67E22] font-semibold text-xs flex items-center gap-1.5 bg-[#FFF8E1] border border-[#FDEBD0] px-2.5 py-1 rounded-full w-max">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        {product.stock} (Low)
+                      </span>
+                    ) : (
+                      <span className="text-slate-700 dark:text-slate-300 font-medium">
+                        {product.stock}
+                      </span>
+                    )}
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-3">

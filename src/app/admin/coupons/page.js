@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Edit2, Search, Filter, Ticket, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { Plus, Edit2, Search, Filter, Ticket, ChevronLeft, ChevronRight, Trash2, CheckCircle, XCircle, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 export default function CouponManagementPage() {
@@ -27,6 +27,26 @@ export default function CouponManagementPage() {
           <Plus className="h-4 w-4" />
           Create Coupon
         </Link>
+      </div>
+
+      {/* KPIs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { title: "Total Coupons", value: coupons.length.toString(), icon: Ticket, color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" },
+          { title: "Active Coupons", value: coupons.filter(c => c.status === 'Active').length.toString(), icon: CheckCircle, color: "text-[#00c896]", bg: "bg-[#00c896]/10" },
+          { title: "Expired Coupons", value: coupons.filter(c => c.status === 'Expired').length.toString(), icon: XCircle, color: "text-red-500", bg: "bg-red-50 dark:bg-red-500/10" },
+          { title: "Total Redeemed", value: coupons.reduce((acc, curr) => acc + parseInt(curr.used), 0).toString(), icon: ShoppingBag, color: "text-purple-500", bg: "bg-purple-50 dark:bg-purple-500/10" }
+        ].map((kpi, index) => (
+          <div key={index} className="bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+            <div className={`w-12 h-12 ${kpi.bg} ${kpi.color} rounded-full flex items-center justify-center shrink-0`}>
+              <kpi.icon className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-slate-500 font-medium mb-1">{kpi.title}</p>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{kpi.value}</h3>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Toolbar */}
