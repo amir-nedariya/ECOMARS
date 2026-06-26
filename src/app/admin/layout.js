@@ -11,7 +11,7 @@ import { LayoutDashboard, PackageSearch, Tags, ShoppingCart, Users, Ticket, Line
 
 export default function AdminLayout({ children }) {
  const pathname = usePathname();
- const [sidebarOpen, setSidebarOpen] = useState(true);
+ const [sidebarOpen, setSidebarOpen] = useState(false);
 
  const navItems = [
  { name:"Dashboard", href:"/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
@@ -27,9 +27,9 @@ export default function AdminLayout({ children }) {
  return (
  <div className="h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
  {/* Mobile Sidebar Overlay */}
- {!sidebarOpen && (
+ {sidebarOpen && (
  <div className="fixed inset-0 bg-black/50 z-40 lg:hidden"
- onClick={() => setSidebarOpen(true)}
+ onClick={() => setSidebarOpen(false)}
  ></div>
  )}
 
