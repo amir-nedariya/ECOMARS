@@ -7,12 +7,13 @@ import { useRouter } from "next/navigation";
 
 export default function OrderManagementPage() {
   const router = useRouter();
+  
   const [orders, setOrders] = useState([
-    { id: "#1001", customer: "Amir", product: "Premium Water Bottle", amount: "₹500", status: "Pending", payment: "UPI" },
-    { id: "#1002", customer: "Riya Sen", product: "Designer Black Perfume", amount: "₹3,199", status: "Packed", payment: "COD" },
-    { id: "#1003", customer: "John Doe", product: "Storage Plastic Box", amount: "₹450", status: "Shipped", payment: "UPI" },
-    { id: "#1004", customer: "Neha Sharma", product: "Wireless Headphones", amount: "₹12,999", status: "Delivered", payment: "UPI" },
-    { id: "#1005", customer: "Rahul Verma", product: "Sports Water Bottle", amount: "₹699", status: "Pending", payment: "COD" },
+    { id: "TUBA1025", customer: "Amir", product: "Premium Water Bottle", amount: "₹798", status: "Pending", payment: { method: "upi", upiId: "tubastore@ybl", utr: "123456789012", screenshot: "image_url", status: "pending" } },
+    { id: "#1002", customer: "Riya Sen", product: "Designer Black Perfume", amount: "₹3,199", status: "Packed", payment: { method: "cod", status: "pending" } },
+    { id: "#1003", customer: "John Doe", product: "Storage Plastic Box", amount: "₹450", status: "Shipped", payment: { method: "razorpay", paymentId: "pay_xyz123", status: "paid" } },
+    { id: "#1004", customer: "Neha Sharma", product: "Wireless Headphones", amount: "₹12,999", status: "Delivered", payment: { method: "upi", upiId: "tubastore@ybl", utr: "987654321098", screenshot: "image_url", status: "paid" } },
+    { id: "#1005", customer: "Rahul Verma", product: "Sports Water Bottle", amount: "₹699", status: "Pending", payment: { method: "cod", status: "pending" } },
   ]);
 
   const updateOrderStatus = (orderId, newStatus) => {
@@ -104,11 +105,13 @@ export default function OrderManagementPage() {
                   </td>
                   <td className="p-4 text-center whitespace-nowrap">
                     <span className={`px-2.5 py-1 text-xs font-bold rounded-md border tracking-wider ${
-                      order.payment === 'UPI' 
+                      order.payment.method === 'upi' 
                         ? 'bg-indigo-50 text-indigo-600 border-indigo-200 dark:bg-indigo-500/10 dark:border-indigo-500/20' 
-                        : 'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-500/10 dark:border-orange-500/20'
+                        : order.payment.method === 'razorpay'
+                          ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:border-blue-500/20'
+                          : 'bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-500/10 dark:border-orange-500/20'
                     }`}>
-                      {order.payment}
+                      {order.payment.method.toUpperCase()}
                     </span>
                   </td>
                   <td className="p-4 text-center" onClick={(e) => e.stopPropagation()}>
@@ -129,7 +132,7 @@ export default function OrderManagementPage() {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-3">
-                      <button className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors" title="View Details">
+                      <button onClick={(e) => { e.stopPropagation(); router.push(`/admin/orders/${order.id.replace('#', '')}`); }} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors" title="View Details">
                         <Eye className="h-4 w-4" />
                       </button>
                       <button onClick={(e) => { e.stopPropagation(); /* delete logic */ }} className="text-red-500 hover:text-red-700 transition-colors" title="Delete">
